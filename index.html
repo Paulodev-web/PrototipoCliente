@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>ServeHub Cliente</title>
+<meta name="description" content="App do cliente ServeHub — protótipo navegável.">
+<meta name="theme-color" content="#16a34a">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ServeHub">
+<style>
+  html,body{height:100%;margin:0;background:#eef2ee;overscroll-behavior:none}
+  body{-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+  /* Viewport do app: tela cheia no celular, coluna centrada no desktop. */
+  .sh-app{height:100dvh;display:flex;flex-direction:column;background:#f6f8f6}
+  .sh-app>*{flex:1;min-height:0}
+  @supports not (height:100dvh){.sh-app{height:100vh}}
+  @media (min-width:520px){
+    body{display:flex;align-items:center;justify-content:center}
+    .sh-app{width:430px;height:min(920px,100dvh);border-radius:22px;overflow:hidden;
+            box-shadow:0 18px 50px rgba(12,75,37,.14)}
+  }
+</style>
+<script>
+  // O dc-runtime resolve React/ReactDOM por este mapa em vez de ir ao unpkg.
+  window.__resources = {
+    "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "./assets/vendor/react.production.min.js",
+    "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "./assets/vendor/react-dom.production.min.js"
+  };
+</script>
+<script src="assets/dc-runtime.js"></script>
+</head>
+<body>
+
+<x-dc>
+<helmet>
+<style>/* latin-ext */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("assets/fonts/sora-1.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("assets/fonts/sora-2.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/fonts/sora-1.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/fonts/sora-2.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/fonts/sora-1.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/fonts/sora-2.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/fonts/sora-1.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/fonts/sora-2.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/fonts/sora-1.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/fonts/sora-2.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("assets/fonts/sora-1.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("assets/fonts/sora-2.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<style>
+body{margin:0;background:#eef2ee;font-family:'Sora',system-ui,sans-serif}
+a{color:#116b2f}a:hover{color:#0c4b25}
+*{box-sizing:border-box}
+input,button,textarea{font-family:'Sora',system-ui,sans-serif}
+::placeholder{color:#93a096}
+@keyframes shpulse{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.35)}50%{box-shadow:0 0 0 7px rgba(22,163,74,0)}}
+@keyframes shup{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+*{scrollbar-width:none;-ms-overflow-style:none}
+*::-webkit-scrollbar{width:0;height:0;display:none}
+</style>
+</helmet>
+<div class="sh-app">
+<div style="height:100%;position:relative;overflow:hidden;display:flex;flex-direction:column;font-family:'Sora',system-ui,sans-serif;background:#f6f8f6">
+
+<sc-if value="{{ sLogin }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Login" style="flex:1;display:flex;flex-direction:column;overflow:auto">
+  <div style="background:linear-gradient(135deg,#16a34a 0%,#148e3d 55%,#137a32 100%);padding:110px 26px 44px;position:relative;overflow:hidden">
+    <svg width="340" height="248" sc-camel-view-box="560 160 980 760" style="position:absolute;right:-90px;top:-20px;opacity:.14"><path fill="#ffffff" d="M688.95,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path><path fill="#ffffff" d="M957.84,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path><path fill="#ffffff" d="M1231.05,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path></svg>
+    <svg width="52" height="38" sc-camel-view-box="560 160 980 760" style="position:relative"><path fill="#d2ffe1" d="M688.95,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path><polygon fill="#d2ffe1" points="597.89 365.5 688.95 191 962.16 191 871.09 365.5 597.89 365.5"></polygon><path fill="#ffffff" d="M957.84,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path><polygon fill="#ffffff" points="866.77 365.5 957.84 191 1231.05 191 1139.98 365.5 866.77 365.5"></polygon><path fill="#ffffff" d="M1231.05,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path><polygon fill="#ffffff" points="1139.98 365.5 1231.05 191 1504.25 191 1413.18 365.5 1139.98 365.5"></polygon></svg>
+    <div style="font-size:27px;font-weight:800;color:#ffffff;letter-spacing:-.4px;margin-top:14px;position:relative">ServeHub</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.9);margin-top:3px;position:relative">Resolva sem complicação</div>
+  </div>
+  <div style="flex:1;padding:26px 20px 30px;display:flex;flex-direction:column;gap:12px">
+    <div>
+      <div style="font-size:12px;font-weight:600;color:#4a544d;margin-bottom:6px">E-mail</div>
+      <input placeholder="voce@email.com.br" style="width:100%;padding:14px 16px;border:1.5px solid #dbe4dd;border-radius:12px;font-size:14px;background:#ffffff;outline:none" style-focus="border-color:#16a34a">
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:600;color:#4a544d;margin-bottom:6px">Senha</div>
+      <input type="password" placeholder="••••••••" style="width:100%;padding:14px 16px;border:1.5px solid #dbe4dd;border-radius:12px;font-size:14px;background:#ffffff;outline:none" style-focus="border-color:#16a34a">
+    </div>
+    <button sc-camel-on-click="{{ doLogin }}" style="width:100%;padding:15px;background:#116b2f;color:#ffffff;border:0;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;margin-top:4px" style-hover="background:#0c4b25">Entrar</button>
+    <button sc-camel-on-click="{{ navCadastro }}" style="width:100%;padding:14px;background:#ffffff;color:#116b2f;border:1.5px solid #bfd9c6;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#eafbf0">Criar conta</button>
+    <a href="#" style="text-align:center;font-size:12.5px;font-weight:600;text-decoration:none;margin-top:2px">Esqueci minha senha</a>
+    <div style="flex:1"></div>
+    <div style="text-align:center;font-size:11px;color:#7b877e;line-height:1.6">Profissionais verificados · Pagamento retido até a conclusão · Garantia de refação</div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ sCadastro }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Cadastro" style="flex:1;display:flex;flex-direction:column;overflow:auto">
+  <div style="padding:72px 20px 14px;background:#ffffff;border-bottom:1px solid #e7ede8;display:flex;align-items:center;gap:10px">
+    <button sc-camel-on-click="{{ navLogin }}" style="width:36px;height:36px;border-radius:50%;border:1px solid #dbe4dd;background:#ffffff;cursor:pointer;font-size:16px;color:#4a544d;line-height:1">‹</button>
+    <div style="font-size:17px;font-weight:700;color:#212121">Criar conta</div>
+  </div>
+  <div style="padding:22px 20px 30px;display:flex;flex-direction:column;gap:12px">
+    <div>
+      <div style="font-size:12px;font-weight:600;color:#4a544d;margin-bottom:6px">Nome completo</div>
+      <input placeholder="Juliana Prates" style="width:100%;padding:14px 16px;border:1.5px solid #dbe4dd;border-radius:12px;font-size:14px;background:#ffffff;outline:none" style-focus="border-color:#16a34a">
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:600;color:#4a544d;margin-bottom:6px">E-mail</div>
+      <input placeholder="voce@email.com.br" style="width:100%;padding:14px 16px;border:1.5px solid #dbe4dd;border-radius:12px;font-size:14px;background:#ffffff;outline:none" style-focus="border-color:#16a34a">
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:600;color:#4a544d;margin-bottom:6px">Celular</div>
+      <input placeholder="(55) 99999-0000" style="width:100%;padding:14px 16px;border:1.5px solid #dbe4dd;border-radius:12px;font-size:14px;background:#ffffff;outline:none" style-focus="border-color:#16a34a">
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:600;color:#4a544d;margin-bottom:6px">Senha</div>
+      <input type="password" placeholder="Mínimo de 8 caracteres" style="width:100%;padding:14px 16px;border:1.5px solid #dbe4dd;border-radius:12px;font-size:14px;background:#ffffff;outline:none" style-focus="border-color:#16a34a">
+    </div>
+    <div style="display:flex;gap:11px;align-items:flex-start;margin-top:6px">
+      <button sc-camel-on-click="{{ toggleTerms }}" style="width:24px;height:24px;flex:none;border-radius:7px;border:1.5px solid {{ termsBd }};background:{{ termsBg }};color:#ffffff;font-size:13px;cursor:pointer;line-height:1;padding:0">{{ termsMark }}</button>
+      <div style="font-size:12px;color:#4a544d;line-height:1.55">Li e aceito os <a href="#" style="font-weight:600">Termos de Uso</a> e a <a href="#" style="font-weight:600">Política de Privacidade</a> da ServeHub.</div>
+    </div>
+    <button sc-camel-on-click="{{ doSignup }}" style="width:100%;padding:15px;background:{{ signupBg }};color:#ffffff;border:0;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px">Criar conta</button>
+    <div style="text-align:center;font-size:11px;color:#7b877e">Seus dados são protegidos pela LGPD.</div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ sBusca }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Buscar serviços" style="flex:1;overflow:auto;display:flex;flex-direction:column">
+  <div style="padding:70px 20px 14px;background:#ffffff;border-bottom:1px solid #e7ede8">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:11px;color:#7b877e">Olá, Juliana 👋</div>
+        <div style="font-size:12.5px;font-weight:600;color:#212121;margin-top:1px">Ijuí, RS · Rua Sete de Setembro</div>
+      </div>
+      <div style="width:38px;height:38px;border-radius:50%;background:#116b2f;color:#ffffff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">JP</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <div style="flex:1;display:flex;align-items:center;gap:8px;background:#f2f6f2;border:1.5px solid #e2e9e3;border-radius:12px;padding:0 12px">
+        <svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="#7b877e" stroke-width="2"></circle><path d="M16 16l4.5 4.5" stroke="#7b877e" stroke-width="2" stroke-linecap="round"></path></svg>
+        <input value="{{ query }}" sc-camel-on-change="{{ onQuery }}" placeholder="O que você precisa resolver?" style="flex:1;border:0;background:none;outline:none;font-size:13px;padding:12px 0;min-width:0">
+      </div>
+      <button sc-camel-on-click="{{ openFilter }}" style="border:1.5px solid #dbe4dd;border-radius:12px;background:{{ fBg }};color:{{ fFg }};font-size:12px;font-weight:600;padding:0 14px;cursor:pointer;white-space:nowrap">{{ fLabel }}</button>
+    </div>
+    <div style="display:flex;gap:7px;margin-top:12px;overflow-x:auto;padding-bottom:2px">
+      <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+        <button sc-camel-on-click="{{ c.onTap }}" style="flex:none;padding:7px 13px;border-radius:999px;border:1.5px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-size:11.5px;font-weight:600;cursor:pointer">{{ c.label }}</button>
+      </sc-for>
+    </div>
+  </div>
+  <div style="padding:16px 16px 24px;display:flex;flex-direction:column;gap:10px">
+    <sc-for list="{{ pros }}" as="p" hint-placeholder-count="3">
+      <div sc-camel-on-click="{{ p.onOpen }}" style="background:#ffffff;border:1px solid #e7ede8;border-radius:16px;padding:14px;display:flex;gap:12px;cursor:pointer" style-hover="border-color:#bfd9c6">
+        <div style="position:relative;flex:none">
+          <div style="width:48px;height:48px;position:relative"><div style="{{ p.phSt }}"></div></div>
+          <div style="position:absolute;right:0;bottom:0;width:12px;height:12px;border-radius:50%;background:{{ p.dot }};border:2px solid #ffffff"></div>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:5px">
+            <div style="font-size:13.5px;font-weight:700;color:#212121;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</div>
+            <sc-if value="{{ p.ver }}" hint-placeholder-val="{{ false }}">
+              <svg width="14" height="14" sc-camel-view-box="0 0 24 24" style="flex:none"><circle cx="12" cy="12" r="10" fill="#116b2f"></circle><path d="M7.5 12.5l3 3 6-6.5" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </sc-if>
+          </div>
+          <div style="font-size:11.5px;color:#7b877e;margin-top:2px">{{ p.cat }} · {{ p.dist }}</div>
+          <div style="font-size:11.5px;color:#4a544d;margin-top:5px"><span style="color:#f5a623">★</span> <b>{{ p.rt }}</b> · {{ p.revTxt }}</div>
+          <div style="font-size:11px;font-weight:600;color:{{ p.statusFg }};margin-top:4px">{{ p.statusTxt }}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;flex:none">
+          <button sc-camel-on-click="{{ p.onFav }}" style="background:none;border:0;cursor:pointer;padding:2px">
+            <svg width="20" height="20" sc-camel-view-box="0 0 24 24"><path d="M12 19.5L5.2 12.9a4.2 4.2 0 015.9-6l.9.9.9-.9a4.2 4.2 0 015.9 6z" fill="{{ p.favIcon }}" stroke="{{ p.favStroke }}" stroke-width="1.8" stroke-linejoin="round"></path></svg>
+          </button>
+          <div style="text-align:right">
+            <div style="font-size:9.5px;color:#9aa79e">a partir de</div>
+            <div style="font-size:13.5px;font-weight:700;color:#116b2f">{{ p.price }}</div>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+    <sc-if value="{{ noPros }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;padding:44px 24px;color:#7b877e">
+        <div style="font-size:15px;font-weight:700;color:#212121">Nenhum profissional encontrado</div>
+        <div style="font-size:12px;margin-top:6px;line-height:1.6">Tente outra palavra ou limpe os filtros para ver todos os profissionais da sua região.</div>
+      </div>
+    </sc-if>
+    <button sc-camel-on-click="{{ navMapa }}" style="margin-top:4px;padding:13px;border:1.5px solid #bfd9c6;border-radius:12px;background:#ffffff;color:#116b2f;font-size:12.5px;font-weight:600;cursor:pointer" style-hover="background:#eafbf0">Ver no mapa de prestadores</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ filterOpen }}" hint-placeholder-val="{{ false }}">
+<div sc-camel-on-click="{{ closeFilter }}" style="position:absolute;inset:0;background:rgba(18,26,20,.45);z-index:28"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;z-index:30;background:#ffffff;border-radius:24px 24px 0 0;max-height:76%;display:flex;flex-direction:column;animation:shup .28s ease">
+  <div style="width:40px;height:4px;border-radius:99px;background:#d7e0d9;margin:10px auto 0"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px 8px">
+    <div style="font-size:16px;font-weight:700;color:#212121">Filtros</div>
+    <button sc-camel-on-click="{{ clearF }}" style="background:none;border:0;color:#116b2f;font-size:12px;font-weight:600;cursor:pointer">Limpar tudo</button>
+  </div>
+  <div style="flex:1;overflow:auto;padding:4px 20px 12px;display:flex;flex-direction:column;gap:16px">
+    <sc-for list="{{ filterGroups }}" as="g" hint-placeholder-count="4">
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#4a544d;margin-bottom:8px">{{ g.title }}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px">
+          <sc-for list="{{ g.opts }}" as="o" hint-placeholder-count="4">
+            <button sc-camel-on-click="{{ o.onTap }}" style="padding:8px 13px;border-radius:999px;border:1.5px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }};font-size:11.5px;font-weight:600;cursor:pointer">{{ o.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <div style="padding:12px 20px 30px;border-top:1px solid #eef2ee">
+    <button sc-camel-on-click="{{ applyF }}" style="width:100%;padding:15px;background:#116b2f;color:#ffffff;border:0;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#0c4b25">Ver resultados</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ sFav }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Favoritos" style="flex:1;overflow:auto;display:flex;flex-direction:column">
+  <div style="padding:72px 20px 14px;background:#ffffff;border-bottom:1px solid #e7ede8">
+    <div style="font-size:19px;font-weight:700;color:#212121">Favoritos</div>
+    <div style="font-size:11.5px;color:#7b877e;margin-top:2px">Profissionais que você salvou para chamar de novo</div>
+  </div>
+  <div style="padding:16px 16px 24px;display:flex;flex-direction:column;gap:10px">
+    <sc-for list="{{ favPros }}" as="p" hint-placeholder-count="2">
+      <div sc-camel-on-click="{{ p.onOpen }}" style="background:#ffffff;border:1px solid #e7ede8;border-radius:16px;padding:14px;display:flex;gap:12px;cursor:pointer" style-hover="border-color:#bfd9c6">
+        <div style="position:relative;flex:none">
+          <div style="width:48px;height:48px;position:relative"><div style="{{ p.phSt }}"></div></div>
+          <div style="position:absolute;right:0;bottom:0;width:12px;height:12px;border-radius:50%;background:{{ p.dot }};border:2px solid #ffffff"></div>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:5px">
+            <div style="font-size:13.5px;font-weight:700;color:#212121;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</div>
+            <sc-if value="{{ p.ver }}" hint-placeholder-val="{{ false }}">
+              <svg width="14" height="14" sc-camel-view-box="0 0 24 24" style="flex:none"><circle cx="12" cy="12" r="10" fill="#116b2f"></circle><path d="M7.5 12.5l3 3 6-6.5" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </sc-if>
+          </div>
+          <div style="font-size:11.5px;color:#7b877e;margin-top:2px">{{ p.cat }} · {{ p.dist }}</div>
+          <div style="font-size:11.5px;color:#4a544d;margin-top:5px"><span style="color:#f5a623">★</span> <b>{{ p.rt }}</b> · {{ p.revTxt }}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;flex:none">
+          <button sc-camel-on-click="{{ p.onFav }}" style="background:none;border:0;cursor:pointer;padding:2px">
+            <svg width="20" height="20" sc-camel-view-box="0 0 24 24"><path d="M12 19.5L5.2 12.9a4.2 4.2 0 015.9-6l.9.9.9-.9a4.2 4.2 0 015.9 6z" fill="{{ p.favIcon }}" stroke="{{ p.favStroke }}" stroke-width="1.8" stroke-linejoin="round"></path></svg>
+          </button>
+          <div style="text-align:right">
+            <div style="font-size:9.5px;color:#9aa79e">a partir de</div>
+            <div style="font-size:13.5px;font-weight:700;color:#116b2f">{{ p.price }}</div>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+    <sc-if value="{{ noFavs }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;padding:56px 24px;color:#7b877e">
+        <svg width="34" height="34" sc-camel-view-box="0 0 24 24" style="opacity:.5"><path d="M12 19.5L5.2 12.9a4.2 4.2 0 015.9-6l.9.9.9-.9a4.2 4.2 0 015.9 6z" fill="none" stroke="#9aa79e" stroke-width="1.6" stroke-linejoin="round"></path></svg>
+        <div style="font-size:15px;font-weight:700;color:#212121;margin-top:10px">Nenhum favorito ainda</div>
+        <div style="font-size:12px;margin-top:6px;line-height:1.6">Toque no coração de um profissional para salvá-lo aqui.</div>
+        <button sc-camel-on-click="{{ navBusca }}" style="margin-top:16px;padding:11px 20px;border:1.5px solid #bfd9c6;border-radius:12px;background:#ffffff;color:#116b2f;font-size:12.5px;font-weight:600;cursor:pointer">Buscar serviços</button>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ sSolic }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Solicitar serviço" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+  <div style="padding:70px 20px 12px;background:#ffffff;border-bottom:1px solid #e7ede8">
+    <div style="display:flex;align-items:center;gap:10px">
+      <button sc-camel-on-click="{{ onSolBack }}" style="width:36px;height:36px;border-radius:50%;border:1px solid #dbe4dd;background:#ffffff;cursor:pointer;font-size:16px;color:#4a544d;line-height:1">‹</button>
+      <div>
+        <div style="font-size:16px;font-weight:700;color:#212121">Solicitar serviço</div>
+        <div style="font-size:11px;color:#7b877e">{{ stepTitle }}</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;margin-top:12px">
+      <sc-for list="{{ solSteps }}" as="sp" hint-placeholder-count="4">
+        <div style="width:24px;height:24px;border-radius:8px;background:{{ sp.bg }};color:{{ sp.fg }};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ sp.mark }}</div>
+        <div style="flex:1;height:2px;background:#e2e9e3;border-radius:2px"></div>
+      </sc-for>
+      <div style="font-size:10px;color:#9aa79e;font-weight:600;white-space:nowrap">{{ solStep }}/4</div>
+    </div>
+  </div>
+  <div style="flex:1;overflow:auto;padding:16px 16px 20px;display:flex;flex-direction:column;gap:10px">
+    <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ false }}">
+      <div style="font-size:11.5px;color:#7b877e;margin-bottom:2px">Serviços de elétrica em Ijuí — preço fixo, sem surpresa.</div>
+      <sc-for list="{{ services }}" as="v" hint-placeholder-count="4">
+        <button sc-camel-on-click="{{ v.onTap }}" style="text-align:left;background:{{ v.bg }};border:1.5px solid {{ v.bd }};border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer">
+          <div style="flex:1">
+            <div style="font-size:13.5px;font-weight:700;color:#212121">{{ v.n }}</div>
+            <div style="font-size:11px;color:#7b877e;margin-top:3px">{{ v.d }}</div>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:#116b2f;flex:none">{{ v.price }}</div>
+        </button>
+      </sc-for>
+    </sc-if>
+    <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ false }}">
+      <div style="font-size:11.5px;color:#7b877e;margin-bottom:2px">Todos verificados pela ServeHub — documentos e antecedentes conferidos.</div>
+      <sc-for list="{{ solPros }}" as="p" hint-placeholder-count="3">
+        <button sc-camel-on-click="{{ p.onSel }}" style="text-align:left;background:{{ p.selBg }};border:1.5px solid {{ p.selBd }};border-radius:14px;padding:13px;display:flex;gap:12px;align-items:center;cursor:pointer">
+          <div style="width:44px;height:44px;position:relative;flex:none"><div style="{{ p.phSt }}"></div></div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:5px">
+              <div style="font-size:13px;font-weight:700;color:#212121;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</div>
+              <sc-if value="{{ p.ver }}" hint-placeholder-val="{{ false }}">
+                <svg width="13" height="13" sc-camel-view-box="0 0 24 24" style="flex:none"><circle cx="12" cy="12" r="10" fill="#116b2f"></circle><path d="M7.5 12.5l3 3 6-6.5" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </sc-if>
+            </div>
+            <div style="font-size:11px;color:#7b877e;margin-top:2px"><span style="color:#f5a623">★</span> {{ p.rt }} · {{ p.dist }} · {{ p.statusTxt }}</div>
+          </div>
+          <div style="font-size:12.5px;font-weight:700;color:#116b2f;flex:none">{{ p.price }}</div>
+        </button>
+      </sc-for>
+    </sc-if>
+    <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;background:#e9efe9;border-radius:12px;padding:4px;gap:4px">
+        <button sc-camel-on-click="{{ setAg }}" style="flex:1;padding:10px;border:0;border-radius:9px;background:{{ agBg }};font-size:12px;font-weight:600;color:#212121;cursor:pointer">Agendar data e hora</button>
+        <button sc-camel-on-click="{{ setPr }}" style="flex:1;padding:10px;border:0;border-radius:9px;background:{{ prBg }};font-size:12px;font-weight:600;color:#212121;cursor:pointer">Pronto atendimento</button>
+      </div>
+      <sc-if value="{{ schedAg }}" hint-placeholder-val="{{ true }}">
+        <div style="font-size:12px;font-weight:700;color:#4a544d;margin-top:6px">Data</div>
+        <div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:2px">
+          <sc-for list="{{ dates }}" as="d" hint-placeholder-count="4">
+            <button sc-camel-on-click="{{ d.onTap }}" style="flex:none;padding:9px 13px;border-radius:11px;border:1.5px solid {{ d.bd }};background:{{ d.bg }};color:{{ d.fg }};font-size:11.5px;font-weight:600;cursor:pointer">{{ d.label }}</button>
+          </sc-for>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#4a544d;margin-top:6px">Faixa de horário</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px">
+          <sc-for list="{{ times }}" as="t" hint-placeholder-count="4">
+            <button sc-camel-on-click="{{ t.onTap }}" style="padding:9px 13px;border-radius:11px;border:1.5px solid {{ t.bd }};background:{{ t.bg }};color:{{ t.fg }};font-size:11.5px;font-weight:600;cursor:pointer">{{ t.label }}</button>
+          </sc-for>
+        </div>
+        <div style="font-size:11px;color:#7b877e;line-height:1.6;margin-top:4px">O profissional confirma dentro da faixa escolhida e você acompanha tudo pelo app.</div>
+      </sc-if>
+      <sc-if value="{{ schedPr }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#eafbf0;border:1.5px solid #bfd9c6;border-radius:14px;padding:16px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="width:9px;height:9px;border-radius:50%;background:#16a34a;animation:shpulse 1.6s infinite"></span>
+            <div style="font-size:13px;font-weight:700;color:#0c4b25">Atendimento imediato</div>
+          </div>
+          <div style="font-size:11.5px;color:#4a544d;line-height:1.6;margin-top:6px">{{ prontoPro }} está disponível agora e chega em até <b>40 minutos</b>. O cronômetro de chegada aparece na tela de acompanhamento.</div>
+        </div>
+      </sc-if>
+    </sc-if>
+    <sc-if value="{{ isStep4 }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:9px">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:#7b877e">Serviço</span><b style="color:#212121">{{ svcName }}</b></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:#7b877e">Profissional</span><b style="color:#212121">{{ proName }}</b></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:#7b877e">Quando</span><b style="color:#212121">{{ schedTxt }}</b></div>
+        <div style="height:1px;background:#eef2ee"></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:#7b877e">Valor do serviço</span><span style="color:#212121">{{ svcVal }}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:#7b877e">Taxa de serviço ServeHub</span><span style="color:#212121">{{ taxaVal }}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700;color:#212121"><span>Total</span><span>{{ totalVal }}</span></div>
+      </div>
+      <div style="background:#eafbf0;border:1.5px solid #bfd9c6;border-radius:14px;padding:13px 14px;display:flex;gap:10px;align-items:flex-start">
+        <svg width="18" height="18" sc-camel-view-box="0 0 24 24" style="flex:none;margin-top:1px"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="#116b2f"></rect><path d="M8 10V7.5a4 4 0 018 0V10" stroke="#116b2f" stroke-width="2" fill="none"></path></svg>
+        <div style="font-size:11px;color:#0c4b25;line-height:1.6"><b>Seu dinheiro fica protegido.</b> A ServeHub retém o pagamento e só repassa ao profissional quando você confirmar a conclusão com o código de fim.</div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:#4a544d;margin-top:2px">Forma de pagamento</div>
+      <sc-for list="{{ pays }}" as="pg" hint-placeholder-count="3">
+        <button sc-camel-on-click="{{ pg.onTap }}" style="text-align:left;background:{{ pg.bg }};border:1.5px solid {{ pg.bd }};border-radius:13px;padding:13px 14px;display:flex;align-items:center;gap:11px;cursor:pointer">
+          <span style="width:18px;height:18px;border-radius:50%;border:2px solid {{ pg.rbd }};background:{{ pg.rb }};box-shadow:inset 0 0 0 3px #ffffff;flex:none"></span>
+          <span style="flex:1"><b style="font-size:12.5px;color:#212121">{{ pg.t }}</b><span style="display:block;font-size:10.5px;color:#7b877e;margin-top:1px">{{ pg.d }}</span></span>
+        </button>
+      </sc-for>
+      <input placeholder="Cupom de desconto (opcional)" style="width:100%;padding:13px 15px;border:1.5px dashed #c3ccc5;border-radius:12px;font-size:12.5px;background:#ffffff;outline:none" style-focus="border-color:#16a34a">
+    </sc-if>
+  </div>
+  <div style="padding:12px 16px 30px;background:#ffffff;border-top:1px solid #e7ede8">
+    <button sc-camel-on-click="{{ onNext }}" style="width:100%;padding:15px;background:{{ nextBg }};color:#ffffff;border:0;border-radius:12px;font-size:14.5px;font-weight:600;cursor:pointer">{{ nextLabel }}</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ sAberto }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Serviço em aberto" style="flex:1;overflow:auto;display:flex;flex-direction:column">
+  <div style="padding:72px 20px 14px;background:#ffffff;border-bottom:1px solid #e7ede8">
+    <div style="font-size:19px;font-weight:700;color:#212121">Serviço em aberto</div>
+    <div style="font-size:11.5px;color:#7b877e;margin-top:2px">{{ ordSvc }} · hoje</div>
+  </div>
+  <div style="padding:16px 16px 26px;display:flex;flex-direction:column;gap:12px">
+    <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:16px;padding:14px;display:flex;gap:12px;align-items:center">
+      <div style="width:44px;height:44px;position:relative;flex:none"><div style="{{ ordPhSt }}"></div></div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:5px">
+          <div style="font-size:13.5px;font-weight:700;color:#212121">{{ ordProName }}</div>
+          <svg width="14" height="14" sc-camel-view-box="0 0 24 24" style="flex:none"><circle cx="12" cy="12" r="10" fill="#116b2f"></circle><path d="M7.5 12.5l3 3 6-6.5" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+        <div style="font-size:11px;color:#7b877e;margin-top:2px">{{ ordCat }} · <span style="color:#f5a623">★</span> {{ ordRt }}</div>
+      </div>
+      <button sc-camel-on-click="{{ navSup }}" style="padding:9px 13px;border:1.5px solid #bfd9c6;border-radius:10px;background:#ffffff;color:#116b2f;font-size:11px;font-weight:600;cursor:pointer" style-hover="background:#eafbf0">Suporte</button>
+    </div>
+    <div style="background:#eafbf0;border:1px solid #bfd9c6;border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:9px">
+      <svg width="15" height="15" sc-camel-view-box="0 0 24 24" style="flex:none"><rect x="5" y="10" width="14" height="10" rx="2.5" fill="#116b2f"></rect><path d="M8 10V7.5a4 4 0 018 0V10" stroke="#116b2f" stroke-width="2" fill="none"></path></svg>
+      <div style="font-size:11px;color:#0c4b25;line-height:1.5"><b>{{ ordTotal }} retidos pela ServeHub</b> — liberados ao profissional na conclusão.</div>
+    </div>
+    <sc-if value="{{ atrasoOn }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#fff6e6;border:1.5px solid #eecf9a;border-radius:14px;padding:14px">
+        <div style="font-size:12.5px;font-weight:700;color:#7a5200">⚠ O profissional avisou um atraso</div>
+        <div style="font-size:11.5px;color:#6b5a33;line-height:1.6;margin-top:5px">Novo horário previsto de chegada: <b>15:50</b> (20 min além da faixa). Você decide como seguir.</div>
+        <div style="display:flex;gap:8px;margin-top:11px">
+          <button sc-camel-on-click="{{ aceitaAtraso }}" style="flex:1;padding:11px;background:#116b2f;color:#ffffff;border:0;border-radius:10px;font-size:11.5px;font-weight:600;cursor:pointer">Aceitar novo horário</button>
+          <button sc-camel-on-click="{{ cancelaAtraso }}" style="flex:1;padding:11px;background:#ffffff;color:#b3261e;border:1.5px solid #e6b6b3;border-radius:10px;font-size:11.5px;font-weight:600;cursor:pointer">Cancelar sem custo</button>
+        </div>
+      </div>
+    </sc-if>
+    <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:16px;padding:16px">
+      <div style="font-size:12px;font-weight:700;color:#4a544d;margin-bottom:12px">Acompanhamento</div>
+      <sc-for list="{{ timeline }}" as="t" hint-placeholder-count="7">
+        <div style="display:flex;gap:11px">
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="width:20px;height:20px;border-radius:7px;background:{{ t.dotBg }};border:1.5px solid {{ t.dotBd }};color:#ffffff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;animation:{{ t.anim }};flex:none">{{ t.mark }}</div>
+            <div style="width:2px;flex:1;min-height:14px;background:{{ t.lineBg }};margin:2px 0"></div>
+          </div>
+          <div style="padding-bottom:12px">
+            <div style="font-size:12.5px;color:{{ t.fg }};font-weight:{{ t.fw }}">{{ t.label }}</div>
+            <div style="font-size:10.5px;color:#9aa79e;margin-top:1px">{{ t.sub }}</div>
+          </div>
+        </div>
+      </sc-for>
+      <sc-if value="{{ canSimAtraso }}" hint-placeholder-val="{{ false }}">
+        <button sc-camel-on-click="{{ simAtraso }}" style="background:none;border:0;color:#9aa79e;font-size:10.5px;cursor:pointer;padding:0;text-decoration:underline">Simular aviso de atraso</button>
+      </sc-if>
+    </div>
+    <sc-if value="{{ showOtp }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#ffffff;border:2px solid #16a34a;border-radius:16px;padding:18px 16px">
+        <div style="font-size:14px;font-weight:700;color:#212121">{{ otpTitle }}</div>
+        <div style="font-size:11.5px;color:#7b877e;line-height:1.6;margin-top:4px">{{ otpSub }}</div>
+        <div style="display:flex;gap:9px;justify-content:center;margin:16px 0 6px">
+          <sc-for list="{{ otpBoxes }}" as="b" hint-placeholder-count="4">
+            <div style="width:50px;height:58px;border:2px solid {{ b.bd }};border-radius:13px;background:#f6f8f6;font-size:24px;font-weight:700;color:#212121;display:flex;align-items:center;justify-content:center">{{ b.v }}</div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ otpErr }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;font-size:11px;color:#b3261e;font-weight:600">Código incorreto — confira com o profissional.</div>
+        </sc-if>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px">
+          <sc-for list="{{ keys }}" as="k" hint-placeholder-count="12">
+            <button sc-camel-on-click="{{ k.onTap }}" style="height:46px;border:1px solid {{ k.bd }};border-radius:11px;background:{{ k.bg }};font-size:17px;font-weight:600;color:#212121;cursor:pointer" style-hover="background:#f1f6f2">{{ k.d }}</button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ stAndamento }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:16px;padding:16px;text-align:center">
+        <div style="display:inline-flex;align-items:center;gap:8px;background:#eafbf0;border-radius:999px;padding:7px 14px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#16a34a;animation:shpulse 1.6s infinite"></span>
+          <span style="font-size:12px;font-weight:700;color:#0c4b25">Serviço em andamento</span>
+        </div>
+        <div style="font-size:11.5px;color:#7b877e;line-height:1.6;margin-top:10px">Iniciado às 15:35. Quando o profissional terminar, ele informa o <b>código de fim</b> para você encerrar.</div>
+        <button sc-camel-on-click="{{ encerrar }}" style="width:100%;margin-top:13px;padding:14px;background:#116b2f;color:#ffffff;border:0;border-radius:12px;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#0c4b25">Digitar código de fim</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{ stConcluido }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:16px;padding:20px 16px;text-align:center">
+        <svg width="40" height="40" sc-camel-view-box="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#116b2f"></circle><path d="M7 12.5l3.2 3.2L17 9" stroke="#ffffff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div style="font-size:15px;font-weight:700;color:#212121;margin-top:8px">Serviço concluído!</div>
+        <div style="font-size:11.5px;color:#7b877e;line-height:1.6;margin-top:5px">Pagamento de {{ ordTotal }} liberado ao profissional. Garantia de refação válida por 7 dias.</div>
+        <button sc-camel-on-click="{{ irAvaliar }}" style="width:100%;margin-top:14px;padding:14px;background:#116b2f;color:#ffffff;border:0;border-radius:12px;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#0c4b25">Avaliar serviço</button>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ sAval }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Avaliação" style="flex:1;overflow:auto;display:flex;flex-direction:column">
+  <div style="padding:72px 20px 14px;background:#ffffff;border-bottom:1px solid #e7ede8">
+    <div style="font-size:19px;font-weight:700;color:#212121">Como foi o serviço?</div>
+    <div style="font-size:11.5px;color:#7b877e;margin-top:2px">Instalação de tomada · João Carlos Menezes</div>
+  </div>
+  <div style="padding:18px 16px 26px;display:flex;flex-direction:column;gap:12px">
+    <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:16px;padding:18px;text-align:center">
+      <div style="font-size:12px;font-weight:700;color:#4a544d">Sua nota</div>
+      <div style="display:flex;justify-content:center;gap:6px;margin-top:10px">
+        <sc-for list="{{ stars }}" as="e" hint-placeholder-count="5">
+          <button sc-camel-on-click="{{ e.onTap }}" style="background:none;border:0;cursor:pointer;font-size:32px;line-height:1;color:{{ e.fg }};padding:2px">★</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:12px;font-weight:700;color:#4a544d">Checklist rápido</div>
+      <sc-for list="{{ checks }}" as="c" hint-placeholder-count="3">
+        <button sc-camel-on-click="{{ c.onTap }}" style="display:flex;gap:11px;align-items:flex-start;background:none;border:0;cursor:pointer;text-align:left;padding:2px 0">
+          <span style="width:23px;height:23px;flex:none;border-radius:7px;border:1.5px solid {{ c.bd }};background:{{ c.bg }};color:#ffffff;font-size:12px;line-height:21px;text-align:center">{{ c.mark }}</span>
+          <span><b style="font-size:12.5px;color:#212121">{{ c.t }}</b><span style="display:block;font-size:10.5px;color:#7b877e;margin-top:1px">{{ c.d }}</span></span>
+        </button>
+      </sc-for>
+    </div>
+    <textarea placeholder="Conte como foi (opcional)" rows="3" style="width:100%;padding:13px 15px;border:1.5px solid #dbe4dd;border-radius:13px;font-size:12.5px;background:#ffffff;outline:none;resize:none" style-focus="border-color:#16a34a"></textarea>
+    <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:11px">
+      <div style="flex:1">
+        <div style="font-size:12.5px;font-weight:600;color:#212121">Bloquear este profissional</div>
+        <div style="font-size:10.5px;color:#7b877e;margin-top:1px">Ele não aparecerá mais nas suas buscas.</div>
+      </div>
+      <button sc-camel-on-click="{{ toggleBlock }}" style="width:42px;height:24px;border-radius:99px;border:0;background:{{ blockBg }};cursor:pointer;position:relative;padding:0;flex:none">
+        <span style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#ffffff;transform:{{ blockX }};transition:transform .18s"></span>
+      </button>
+    </div>
+    <button sc-camel-on-click="{{ onSendAval }}" style="width:100%;padding:15px;background:{{ sendBg }};color:#ffffff;border:0;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer">Enviar avaliação</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ sHist }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Histórico" style="flex:1;overflow:auto;display:flex;flex-direction:column">
+  <div style="padding:72px 20px 14px;background:#ffffff;border-bottom:1px solid #e7ede8">
+    <div style="font-size:19px;font-weight:700;color:#212121">Histórico</div>
+    <div style="font-size:11.5px;color:#7b877e;margin-top:2px">Todos os seus serviços na ServeHub</div>
+  </div>
+  <div style="padding:16px 16px 24px;display:flex;flex-direction:column;gap:10px">
+    <sc-for list="{{ hist }}" as="h" hint-placeholder-count="4">
+      <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:15px;padding:14px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#212121">{{ h.svc }}</div>
+            <div style="font-size:11px;color:#7b877e;margin-top:2px">{{ h.pro }} · {{ h.date }}</div>
+          </div>
+          <span style="flex:none;font-size:10px;font-weight:700;padding:5px 9px;border-radius:999px;background:{{ h.pb }};color:{{ h.pf }}">{{ h.pill }}</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:11px">
+          <div style="font-size:13px;font-weight:700;color:#212121">{{ h.price }}</div>
+          <sc-if value="{{ h.again }}" hint-placeholder-val="{{ false }}">
+            <button sc-camel-on-click="{{ h.onAgain }}" style="padding:9px 14px;border:1.5px solid #bfd9c6;border-radius:10px;background:#ffffff;color:#116b2f;font-size:11px;font-weight:600;cursor:pointer" style-hover="background:#eafbf0">Solicitar novamente</button>
+          </sc-if>
+          <sc-if value="{{ h.open }}" hint-placeholder-val="{{ false }}">
+            <button sc-camel-on-click="{{ h.onTap }}" style="padding:9px 14px;border:0;border-radius:10px;background:#116b2f;color:#ffffff;font-size:11px;font-weight:600;cursor:pointer" style-hover="background:#0c4b25">Acompanhar</button>
+          </sc-if>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ sSup }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Suporte" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+  <div style="padding:72px 20px 12px;background:#ffffff;border-bottom:1px solid #e7ede8">
+    <div style="font-size:19px;font-weight:700;color:#212121">Suporte</div>
+    <div style="font-size:11.5px;color:#7b877e;margin-top:2px">Fale direto com a equipe ServeHub</div>
+    <div style="display:flex;background:#e9efe9;border-radius:12px;padding:4px;gap:4px;margin-top:12px">
+      <button sc-camel-on-click="{{ setFaq }}" style="flex:1;padding:9px;border:0;border-radius:9px;background:{{ faqBg }};font-size:12px;font-weight:600;color:#212121;cursor:pointer">Perguntas frequentes</button>
+      <button sc-camel-on-click="{{ setChat }}" style="flex:1;padding:9px;border:0;border-radius:9px;background:{{ chatBg }};font-size:12px;font-weight:600;color:#212121;cursor:pointer">Chat</button>
+    </div>
+  </div>
+  <sc-if value="{{ supFaq }}" hint-placeholder-val="{{ true }}">
+    <div style="flex:1;overflow:auto;padding:16px 16px 24px;display:flex;flex-direction:column;gap:9px">
+      <sc-for list="{{ faq }}" as="f" hint-placeholder-count="4">
+        <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:14px;overflow:hidden">
+          <button sc-camel-on-click="{{ f.onTap }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:none;border:0;cursor:pointer;padding:14px 15px;text-align:left">
+            <span style="font-size:12.5px;font-weight:600;color:#212121">{{ f.q }}</span>
+            <span style="font-size:16px;color:#116b2f;font-weight:700;flex:none">{{ f.chev }}</span>
+          </button>
+          <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:0 15px 14px;font-size:11.5px;color:#4a544d;line-height:1.65">{{ f.a }}</div>
+          </sc-if>
+        </div>
+      </sc-for>
+      <button sc-camel-on-click="{{ setChat }}" style="margin-top:6px;padding:13px;border:0;border-radius:12px;background:#116b2f;color:#ffffff;font-size:12.5px;font-weight:600;cursor:pointer" style-hover="background:#0c4b25">Não encontrei — abrir chat</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{ supChat }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:9px">
+      <div style="text-align:center;font-size:10px;color:#9aa79e;line-height:1.5;padding:0 20px">Conversa registrada para sua segurança — mensagens não podem ser apagadas.</div>
+      <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="2">
+        <div style="display:flex;flex-direction:column;align-items:{{ m.align }}">
+          <div style="max-width:78%;background:{{ m.bg }};color:{{ m.fg }};border:1px solid #e7ede8;border-radius:15px;padding:11px 14px;font-size:12.5px;line-height:1.55">{{ m.t }}</div>
+          <div style="font-size:9.5px;color:#9aa79e;margin-top:3px;padding:0 4px">{{ m.meta }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="padding:10px 14px 28px;background:#ffffff;border-top:1px solid #e7ede8;display:flex;gap:8px">
+      <input value="{{ draft }}" sc-camel-on-change="{{ onDraft }}" placeholder="Escreva sua mensagem" style="flex:1;padding:13px 15px;border:1.5px solid #dbe4dd;border-radius:999px;font-size:12.5px;background:#f6f8f6;outline:none;min-width:0" style-focus="border-color:#16a34a">
+      <button sc-camel-on-click="{{ onSendMsg }}" style="width:46px;height:46px;flex:none;border-radius:50%;border:0;background:#116b2f;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#0c4b25">
+        <svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none"><path d="M4 12h14M13 6l6 6-6 6" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </button>
+    </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ sConfig }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Configurações" style="flex:1;overflow:auto;display:flex;flex-direction:column">
+  <div style="padding:72px 20px 16px;background:#ffffff;border-bottom:1px solid #e7ede8;display:flex;align-items:center;gap:13px">
+    <div style="width:52px;height:52px;border-radius:50%;background:#116b2f;color:#ffffff;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center">JP</div>
+    <div>
+      <div style="font-size:16px;font-weight:700;color:#212121">Juliana Prates</div>
+      <div style="font-size:11px;color:#7b877e;margin-top:1px">juliana.prates@email.com.br · Ijuí, RS</div>
+    </div>
+  </div>
+  <div style="padding:16px 16px 26px;display:flex;flex-direction:column;gap:10px">
+    <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:16px;overflow:hidden">
+      <sc-for list="{{ configRows }}" as="r" hint-placeholder-count="5">
+        <button style="width:100%;display:flex;align-items:center;gap:10px;background:none;border:0;border-bottom:1px solid #f1f5f1;cursor:pointer;padding:15px 16px;text-align:left" style-hover="background:#f8faf8">
+          <span style="flex:1;font-size:12.5px;font-weight:600;color:#212121">{{ r.t }}</span>
+          <span style="font-size:11px;color:#9aa79e">{{ r.d }}</span>
+          <span style="color:#c3ccc5;font-size:14px">›</span>
+        </button>
+      </sc-for>
+      <div style="display:flex;align-items:center;gap:10px;padding:15px 16px">
+        <span style="flex:1;font-size:12.5px;font-weight:600;color:#212121">Notificações push</span>
+        <button sc-camel-on-click="{{ toggleNotif }}" style="width:42px;height:24px;border-radius:99px;border:0;background:{{ notifBg }};cursor:pointer;position:relative;padding:0">
+          <span style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#ffffff;transform:{{ notifX }};transition:transform .18s"></span>
+        </button>
+      </div>
+    </div>
+    <button sc-camel-on-click="{{ doSair }}" style="padding:14px;border:1.5px solid #e6b6b3;border-radius:12px;background:#ffffff;color:#b3261e;font-size:12.5px;font-weight:600;cursor:pointer" style-hover="background:#fdf3f2">Sair da conta</button>
+    <div style="text-align:center;font-size:10px;color:#9aa79e">ServeHub · versão 1.0 · Feito no RS</div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ sMapa }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Mapa de prestadores" style="flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative">
+  <div style="flex:1;position:relative;background:#e8ede7;background-image:linear-gradient(rgba(255,255,255,.65) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.65) 2px,transparent 2px),linear-gradient(rgba(255,255,255,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.35) 1px,transparent 1px);background-size:120px 120px,120px 120px,30px 30px,30px 30px">
+    <div style="position:absolute;left:-10%;top:38%;width:120%;height:14px;background:rgba(255,255,255,.8);transform:rotate(-9deg)"></div>
+    <div style="position:absolute;left:56%;top:-10%;width:12px;height:120%;background:rgba(255,255,255,.8);transform:rotate(12deg)"></div>
+    <div style="position:absolute;left:12%;top:64%;width:26%;height:18%;background:#d8e6d4;border-radius:14px"></div>
+    <div style="position:absolute;left:70%;top:52%;width:22%;height:14%;background:#d8e6d4;border-radius:14px"></div>
+    <div style="position:absolute;left:44%;top:56%;width:190px;height:190px;margin:-95px 0 0 -95px;border-radius:50%;background:rgba(22,163,74,.08);border:1.5px dashed rgba(22,163,74,.45)"></div>
+    <div style="position:absolute;top:70px;left:16px;right:16px;z-index:8;display:flex;gap:8px">
+      <button sc-camel-on-click="{{ navBusca }}" style="width:40px;height:40px;flex:none;border-radius:12px;border:1px solid #dbe4dd;background:#ffffff;cursor:pointer;font-size:16px;color:#4a544d;box-shadow:0 3px 10px rgba(18,26,20,.1)">‹</button>
+      <div style="flex:1;display:flex;align-items:center;gap:8px;background:#ffffff;border:1px solid #dbe4dd;border-radius:12px;padding:0 13px;box-shadow:0 3px 10px rgba(18,26,20,.1)">
+        <svg width="15" height="15" sc-camel-view-box="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="#7b877e" stroke-width="2"></circle><path d="M16 16l4.5 4.5" stroke="#7b877e" stroke-width="2" stroke-linecap="round"></path></svg>
+        <span style="font-size:12px;color:#4a544d">Ijuí, RS · raio de 5 km</span>
+      </div>
+    </div>
+    <sc-for list="{{ markers }}" as="m" hint-placeholder-count="4">
+      <button sc-camel-on-click="{{ m.onTap }}" style="position:absolute;left:{{ m.x }};top:{{ m.y }};z-index:{{ m.z }};transform:{{ m.sc }};width:42px;height:42px;padding:0;border-radius:14px 14px 14px 3px;border:2px solid #116b2f;background:{{ m.bg }};cursor:pointer;box-shadow:0 4px 12px rgba(18,26,20,.18)">
+        <div style="{{ m.phSt }}"></div>
+        <span style="position:absolute;right:-3px;top:-3px;width:11px;height:11px;border-radius:50%;background:{{ m.dot }};border:2px solid #ffffff"></span>
+      </button>
+    </sc-for>
+  </div>
+  <div style="position:absolute;left:14px;right:14px;bottom:16px;z-index:10;background:#ffffff;border:1px solid #e7ede8;border-radius:18px;padding:14px;box-shadow:0 12px 32px rgba(18,26,20,.18);animation:shup .25s ease">
+    <div style="display:flex;gap:12px;align-items:center">
+      <div style="width:46px;height:46px;position:relative;flex:none"><div style="{{ mapPro.phSt }}"></div></div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:5px">
+          <div style="font-size:13px;font-weight:700;color:#212121;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ mapPro.name }}</div>
+          <sc-if value="{{ mapPro.ver }}" hint-placeholder-val="{{ false }}">
+            <svg width="13" height="13" sc-camel-view-box="0 0 24 24" style="flex:none"><circle cx="12" cy="12" r="10" fill="#116b2f"></circle><path d="M7.5 12.5l3 3 6-6.5" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </sc-if>
+        </div>
+        <div style="font-size:11px;color:#7b877e;margin-top:2px">{{ mapPro.cat }} · {{ mapPro.dist }} · <span style="color:#f5a623">★</span> {{ mapPro.rt }}</div>
+        <div style="font-size:10.5px;font-weight:600;color:{{ mapPro.statusFg }};margin-top:2px">{{ mapPro.statusTxt }}</div>
+      </div>
+      <div style="text-align:right;flex:none">
+        <div style="font-size:9.5px;color:#9aa79e">a partir de</div>
+        <div style="font-size:13.5px;font-weight:700;color:#116b2f">{{ mapPro.price }}</div>
+      </div>
+    </div>
+    <button sc-camel-on-click="{{ onMapSolicitar }}" style="width:100%;margin-top:12px;padding:13px;background:#116b2f;color:#ffffff;border:0;border-radius:11px;font-size:12.5px;font-weight:600;cursor:pointer" style-hover="background:#0c4b25">Ver perfil e solicitar</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ sPerfil }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Perfil do profissional" style="flex:1;overflow:auto;display:flex;flex-direction:column">
+  <div style="background:#ffffff;border-bottom:1px solid #e7ede8;padding:66px 20px 18px">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <button sc-camel-on-click="{{ navBusca }}" style="width:36px;height:36px;border-radius:50%;border:1px solid #dbe4dd;background:#ffffff;cursor:pointer;font-size:16px;color:#4a544d;line-height:1">‹</button>
+      <button sc-camel-on-click="{{ pf.onFav }}" style="width:36px;height:36px;border-radius:50%;border:1px solid #dbe4dd;background:#ffffff;cursor:pointer;display:flex;align-items:center;justify-content:center">
+        <svg width="18" height="18" sc-camel-view-box="0 0 24 24"><path d="M12 19.5L5.2 12.9a4.2 4.2 0 015.9-6l.9.9.9-.9a4.2 4.2 0 015.9 6z" fill="{{ pf.favIcon }}" stroke="{{ pf.favStroke }}" stroke-width="1.8" stroke-linejoin="round"></path></svg>
+      </button>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center;margin-top:12px">
+      <div style="position:relative;flex:none">
+        <div style="width:74px;height:74px;position:relative"><div style="{{ pf.phSt }}"></div></div>
+        <div style="position:absolute;right:2px;bottom:2px;width:15px;height:15px;border-radius:50%;background:{{ pf.dot }};border:2.5px solid #ffffff"></div>
+      </div>
+      <div style="min-width:0">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="font-size:17px;font-weight:700;color:#212121">{{ pf.name }}</div>
+          <sc-if value="{{ pf.ver }}" hint-placeholder-val="{{ true }}">
+            <svg width="16" height="16" sc-camel-view-box="0 0 24 24" style="flex:none"><circle cx="12" cy="12" r="10" fill="#116b2f"></circle><path d="M7.5 12.5l3 3 6-6.5" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </sc-if>
+        </div>
+        <div style="font-size:12px;color:#7b877e;margin-top:2px">{{ pf.cat }} · {{ pfCity }}</div>
+        <sc-if value="{{ pf.ver }}" hint-placeholder-val="{{ true }}">
+          <div style="display:inline-block;font-size:9.5px;font-weight:700;color:#0c4b25;background:#eafbf0;border:1px solid #bfd9c6;border-radius:999px;padding:3px 8px;margin-top:6px">✓ Verificado pela ServeHub</div>
+        </sc-if>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <div style="flex:1;background:#f6f8f6;border-radius:12px;padding:10px;text-align:center">
+        <div style="font-size:13.5px;font-weight:700;color:#212121"><span style="color:#f5a623">★</span> {{ pf.rt }}</div>
+        <div style="font-size:9.5px;color:#7b877e;margin-top:1px">{{ pfRevTxt }}</div>
+      </div>
+      <div style="flex:1;background:#f6f8f6;border-radius:12px;padding:10px;text-align:center">
+        <div style="font-size:13.5px;font-weight:700;color:#212121">{{ pf.dist }}</div>
+        <div style="font-size:9.5px;color:#7b877e;margin-top:1px">de distância</div>
+      </div>
+      <div style="flex:1;background:#f6f8f6;border-radius:12px;padding:10px;text-align:center">
+        <div style="font-size:13.5px;font-weight:700;color:#212121">{{ pf.resp }}</div>
+        <div style="font-size:9.5px;color:#7b877e;margin-top:1px">para responder</div>
+      </div>
+    </div>
+    <sc-if value="{{ pf.online }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:8px;background:#eafbf0;border:1px solid #bfd9c6;border-radius:11px;padding:9px 12px;margin-top:10px">
+        <span style="width:8px;height:8px;border-radius:50%;background:#16a34a;animation:shpulse 1.6s infinite"></span>
+        <span style="font-size:11px;font-weight:700;color:#0c4b25">Disponível agora para pronto atendimento</span>
+      </div>
+    </sc-if>
+  </div>
+  <div style="padding:16px 16px 26px;display:flex;flex-direction:column;gap:12px">
+    <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:15px;padding:14px 15px">
+      <div style="font-size:12px;font-weight:700;color:#4a544d">Sobre</div>
+      <div style="font-size:12px;color:#4a544d;line-height:1.65;margin-top:6px">{{ pfBio }}</div>
+      <div style="font-size:10.5px;color:#9aa79e;margin-top:8px">{{ pfJobs }} pela ServeHub</div>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:#4a544d;margin-bottom:8px">Serviços e preços</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{ pfSvcs }}" as="v" hint-placeholder-count="3">
+          <button sc-camel-on-click="{{ v.onTap }}" style="text-align:left;background:#ffffff;border:1px solid #e7ede8;border-radius:14px;padding:13px 14px;display:flex;align-items:center;gap:11px;cursor:pointer" style-hover="border-color:#bfd9c6;background:#fbfdfb">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:12.5px;font-weight:700;color:#212121">{{ v.n }}</div>
+              <div style="font-size:10.5px;color:#7b877e;margin-top:2px">{{ v.d }}</div>
+            </div>
+            <div style="text-align:right;flex:none">
+              <div style="font-size:13px;font-weight:700;color:#116b2f">{{ v.price }}</div>
+              <div style="font-size:10px;font-weight:600;color:#116b2f;margin-top:2px">Solicitar ›</div>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+      <div style="font-size:10px;color:#9aa79e;margin-top:7px;line-height:1.5">Preço fechado antes de contratar · taxa de serviço exibida no pagamento</div>
+    </div>
+    <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:15px;padding:14px 15px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:12px;font-weight:700;color:#4a544d">Avaliações</div>
+        <div style="font-size:11px;color:#7b877e"><span style="color:#f5a623">★</span> <b>{{ pf.rt }}</b> · {{ pfRevTxt }}</div>
+      </div>
+      <div style="background:#f6f8f6;border-radius:11px;padding:11px 12px;margin-top:9px">
+        <div style="font-size:11px;color:#f5a623;letter-spacing:2px">★★★★★</div>
+        <div style="font-size:11.5px;color:#4a544d;line-height:1.6;margin-top:5px">“{{ pfRvTxt }}”</div>
+        <div style="font-size:10px;color:#9aa79e;margin-top:6px">{{ pfRvWho }} · {{ pfRvWhen }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ sInicio }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Início" style="flex:1;overflow:auto;display:block;background:#f6f8f6">
+  <div style="background:#ffffff;padding:66px 18px 16px;border-bottom:1px solid #eef2ee">
+    <div style="display:flex;align-items:center;gap:10px">
+      <svg width="26" height="19" sc-camel-view-box="560 160 980 760" style="flex:none"><path fill="#4bd078" d="M688.95,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path><polygon fill="#4bd078" points="597.89 365.5 688.95 191 962.16 191 871.09 365.5 597.89 365.5"></polygon><path fill="#16a34a" d="M957.84,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path><polygon fill="#16a34a" points="866.77 365.5 957.84 191 1231.05 191 1139.98 365.5 866.77 365.5"></polygon><path fill="#116b2f" d="M1231.05,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path><polygon fill="#116b2f" points="1139.98 365.5 1231.05 191 1504.25 191 1413.18 365.5 1139.98 365.5"></polygon></svg>
+      <button sc-camel-on-click="{{ navPerfil }}" style="flex:1;background:none;border:0;cursor:pointer;text-align:center;font-size:12px;font-weight:700;color:#212121;padding:4px 0">R. Sete de Setembro, 236 <span style="color:#116b2f">˅</span></button>
+      <button sc-camel-on-click="{{ navFav }}" style="width:34px;height:34px;flex:none;border-radius:50%;border:1px solid #e7ede8;background:#ffffff;cursor:pointer;display:flex;align-items:center;justify-content:center">
+        <svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none"><path d="M12 19.5L5.2 12.9a4.2 4.2 0 015.9-6l.9.9.9-.9a4.2 4.2 0 015.9 6z" stroke="#4a544d" stroke-width="1.8" stroke-linejoin="round"></path></svg>
+      </button>
+      <button sc-camel-on-click="{{ navSup }}" style="width:34px;height:34px;flex:none;border-radius:50%;border:1px solid #e7ede8;background:#ffffff;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center">
+        <svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none"><path d="M6 9a6 6 0 0112 0c0 5 2 6 2 6H4s2-1 2-6z" stroke="#4a544d" stroke-width="1.8" stroke-linejoin="round"></path><path d="M10 19a2 2 0 004 0" stroke="#4a544d" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        <span style="position:absolute;top:1px;right:1px;width:9px;height:9px;border-radius:50%;background:#c73a3a;border:1.5px solid #ffffff"></span>
+      </button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px">
+      <button sc-camel-on-click="{{ tapEle }}" style="background:#f6f8f6;border:1px solid #eef2ee;border-radius:14px;padding:12px 4px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px" style-hover="background:#eafbf0">
+        <svg width="22" height="22" sc-camel-view-box="0 0 24 24"><path d="M13 3L6 13h4.5L9 21l7-10h-4.5z" fill="#116b2f"></path></svg>
+        <span style="font-size:10px;font-weight:600;color:#212121">Elétrica</span>
+      </button>
+      <button sc-camel-on-click="{{ tapHid }}" style="background:#f6f8f6;border:1px solid #eef2ee;border-radius:14px;padding:12px 4px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px" style-hover="background:#eafbf0">
+        <svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none"><path d="M12 4c2.8 3.8 5.5 6.7 5.5 9.7a5.5 5.5 0 11-11 0C6.5 10.7 9.2 7.8 12 4z" stroke="#116b2f" stroke-width="1.8"></path></svg>
+        <span style="font-size:10px;font-weight:600;color:#212121">Hidráulica</span>
+      </button>
+      <button sc-camel-on-click="{{ tapLim }}" style="background:#f6f8f6;border:1px solid #eef2ee;border-radius:14px;padding:12px 4px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px" style-hover="background:#eafbf0">
+        <svg width="22" height="22" sc-camel-view-box="0 0 24 24"><path d="M12 3l2 6.5L20.5 11 14 13l-2 6.5L10 13l-6.5-2L10 9.5z" fill="#116b2f"></path><path d="M19 16l.9 2.6L22.5 19l-2.6.9L19 22.5l-.9-2.6L15.5 19l2.6-.9z" fill="#4bd078"></path></svg>
+        <span style="font-size:10px;font-weight:600;color:#212121">Limpeza</span>
+      </button>
+      <button sc-camel-on-click="{{ tapJar }}" style="background:#f6f8f6;border:1px solid #eef2ee;border-radius:14px;padding:12px 4px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px" style-hover="background:#eafbf0">
+        <svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none"><path d="M5 19C5 11 11 5 19 5c0 8-6 14-14 14z" stroke="#116b2f" stroke-width="1.8" stroke-linejoin="round"></path><path d="M5 19c3-5 6-8 10-10" stroke="#116b2f" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        <span style="font-size:10px;font-weight:600;color:#212121">Jardinagem</span>
+      </button>
+      <button sc-camel-on-click="{{ tapMon }}" style="background:#f6f8f6;border:1px solid #eef2ee;border-radius:14px;padding:12px 4px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px" style-hover="background:#eafbf0">
+        <svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none"><polygon points="12,3.5 19,7.5 19,16.5 12,20.5 5,16.5 5,7.5" stroke="#116b2f" stroke-width="1.8" stroke-linejoin="round"></polygon><circle cx="12" cy="12" r="2.6" stroke="#116b2f" stroke-width="1.8"></circle></svg>
+        <span style="font-size:10px;font-weight:600;color:#212121">Montagem</span>
+      </button>
+      <button sc-camel-on-click="{{ tapTudo }}" style="background:#f6f8f6;border:1px solid #eef2ee;border-radius:14px;padding:12px 4px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px" style-hover="background:#eafbf0">
+        <svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none"><rect x="4" y="5" width="14" height="4.5" rx="1.5" stroke="#116b2f" stroke-width="1.8"></rect><path d="M18 6.5h2.5v5H12v3" stroke="#116b2f" stroke-width="1.8" stroke-linejoin="round"></path><rect x="10.8" y="15" width="2.4" height="5.5" rx="1" stroke="#116b2f" stroke-width="1.8"></rect></svg>
+        <span style="font-size:10px;font-weight:600;color:#212121">Pintura</span>
+      </button>
+      <button sc-camel-on-click="{{ tapTudo }}" style="background:#f6f8f6;border:1px solid #eef2ee;border-radius:14px;padding:12px 4px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px" style-hover="background:#eafbf0">
+        <svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none"><path d="M12 3.5v17M4.6 7.8l14.8 8.4M19.4 7.8L4.6 16.2" stroke="#116b2f" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        <span style="font-size:10px;font-weight:600;color:#212121">Refrigeração</span>
+      </button>
+      <button sc-camel-on-click="{{ tapTudo }}" style="background:#f6f8f6;border:1px solid #eef2ee;border-radius:14px;padding:12px 4px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px" style-hover="background:#eafbf0">
+        <svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none"><rect x="4.5" y="4.5" width="6" height="6" rx="1.5" stroke="#116b2f" stroke-width="1.8"></rect><rect x="13.5" y="4.5" width="6" height="6" rx="1.5" stroke="#116b2f" stroke-width="1.8"></rect><rect x="4.5" y="13.5" width="6" height="6" rx="1.5" stroke="#116b2f" stroke-width="1.8"></rect><rect x="13.5" y="13.5" width="6" height="6" rx="1.5" stroke="#4bd078" stroke-width="1.8"></rect></svg>
+        <span style="font-size:10px;font-weight:600;color:#212121">Ver tudo</span>
+      </button>
+    </div>
+  </div>
+  <div style="padding:16px 0 4px">
+    <div style="display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;padding:0 18px 4px;scroll-snap-type:x mandatory">
+      <div style="flex:none;width:305px;scroll-snap-align:start;border-radius:18px;overflow:hidden;position:relative;background:linear-gradient(120deg,#16a34a,#137a32);padding:18px 18px 16px">
+        <svg width="220" height="160" sc-camel-view-box="560 160 980 760" style="position:absolute;right:-60px;bottom:-40px;opacity:.16"><path fill="#ffffff" d="M688.95,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path><path fill="#ffffff" d="M957.84,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path><path fill="#ffffff" d="M1231.05,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path></svg>
+        <div style="position:relative">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;color:#d2ffe1">PRIMEIRO SERVIÇO</div>
+          <div style="font-size:19px;font-weight:800;color:#ffffff;line-height:1.2;margin-top:5px">Resolva sem<br>complicação</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.9);margin-top:5px">R$ 10 off com o cupom <b>BEMVINDA</b></div>
+          <button sc-camel-on-click="{{ navBusca }}" style="margin-top:11px;padding:9px 15px;border:0;border-radius:999px;background:#ffffff;color:#116b2f;font-size:11px;font-weight:700;cursor:pointer">Buscar agora</button>
+        </div>
+      </div>
+      <div style="flex:none;width:305px;scroll-snap-align:start;border-radius:18px;overflow:hidden;position:relative;background:#212121;padding:18px 18px 16px">
+        <svg width="220" height="160" sc-camel-view-box="560 160 980 760" style="position:absolute;right:-60px;bottom:-40px;opacity:.35"><path fill="#4bd078" d="M688.95,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path><path fill="#16a34a" d="M957.84,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path><path fill="#116b2f" d="M1231.05,889l182.14-349s0-87.25-91.07-87.25h-273.2l-91.07,174.5h227.67l-136.6,261.75h182.14Z"></path></svg>
+        <div style="position:relative">
+          <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:1.5px;color:#97ffba"><span style="width:7px;height:7px;border-radius:50%;background:#4bd078;animation:shpulse 1.6s infinite"></span>PRONTO ATENDIMENTO</div>
+          <div style="font-size:19px;font-weight:800;color:#ffffff;line-height:1.2;margin-top:5px">Profissional na porta<br>em até 40 min</div>
+          <button sc-camel-on-click="{{ navMapa }}" style="margin-top:14px;padding:9px 15px;border:0;border-radius:999px;background:#16a34a;color:#ffffff;font-size:11px;font-weight:700;cursor:pointer">Ver quem está online</button>
+        </div>
+      </div>
+      <div style="flex:none;width:305px;scroll-snap-align:start;border-radius:18px;overflow:hidden;position:relative;background:#d2ffe1;padding:18px 18px 16px">
+        <div style="position:relative">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;color:#116b2f">INDIQUE E GANHE</div>
+          <div style="font-size:19px;font-weight:800;color:#0c4b25;line-height:1.2;margin-top:5px">R$ 20 para você<br>e para quem indicar</div>
+          <div style="font-size:11px;color:#116b2f;margin-top:5px">Crédito na conclusão do primeiro serviço.</div>
+          <button style="margin-top:11px;padding:9px 15px;border:0;border-radius:999px;background:#116b2f;color:#ffffff;font-size:11px;font-weight:700;cursor:pointer">Convidar amigos</button>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:5px;justify-content:center;margin-top:10px">
+      <span style="width:14px;height:5px;border-radius:99px;background:#116b2f"></span>
+      <span style="width:5px;height:5px;border-radius:99px;background:#c3ccc5"></span>
+      <span style="width:5px;height:5px;border-radius:99px;background:#c3ccc5"></span>
+    </div>
+  </div>
+  <div style="padding:14px 18px 4px;display:flex;align-items:baseline;justify-content:space-between">
+    <div style="font-size:14.5px;font-weight:700;color:#212121">Bem avaliados perto de você</div>
+    <button sc-camel-on-click="{{ navBusca }}" style="background:none;border:0;color:#116b2f;font-size:11px;font-weight:700;cursor:pointer">Ver mais</button>
+  </div>
+  <div style="display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;padding:10px 18px 6px">
+    <sc-for list="{{ topPros }}" as="p" hint-placeholder-count="4">
+      <button sc-camel-on-click="{{ p.onOpen }}" style="flex:none;width:132px;background:#ffffff;border:1px solid #e7ede8;border-radius:16px;padding:13px 12px;cursor:pointer;text-align:center" style-hover="border-color:#bfd9c6">
+        <div style="position:relative;width:52px;height:52px;margin:0 auto">
+          <div style="{{ p.phSt }}"></div>
+          <span style="position:absolute;right:0;bottom:0;width:12px;height:12px;border-radius:50%;background:{{ p.dot }};border:2px solid #ffffff"></span>
+        </div>
+        <div style="font-size:11.5px;font-weight:700;color:#212121;margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</div>
+        <div style="font-size:10px;color:#7b877e;margin-top:2px">{{ p.cat }}</div>
+        <div style="font-size:10.5px;color:#4a544d;margin-top:4px"><span style="color:#f5a623">★</span> <b>{{ p.rt }}</b> · {{ p.dist }}</div>
+        <div style="font-size:11px;font-weight:700;color:#116b2f;margin-top:4px">a partir de {{ p.price }}</div>
+      </button>
+    </sc-for>
+  </div>
+  <div style="padding:14px 18px 4px;display:flex;align-items:baseline;justify-content:space-between">
+    <div style="font-size:14.5px;font-weight:700;color:#212121">Peça de novo</div>
+    <button sc-camel-on-click="{{ navHist }}" style="background:none;border:0;color:#116b2f;font-size:11px;font-weight:700;cursor:pointer">Ver histórico</button>
+  </div>
+  <div style="padding:10px 18px 26px;display:flex;flex-direction:column;gap:8px">
+    <sc-for list="{{ againList }}" as="h" hint-placeholder-count="2">
+      <div style="background:#ffffff;border:1px solid #e7ede8;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:700;color:#212121">{{ h.svc }}</div>
+          <div style="font-size:10.5px;color:#7b877e;margin-top:2px">{{ h.pro }} · {{ h.price }}</div>
+        </div>
+        <button sc-camel-on-click="{{ h.onAgain }}" style="flex:none;padding:9px 13px;border:1.5px solid #bfd9c6;border-radius:10px;background:#ffffff;color:#116b2f;font-size:10.5px;font-weight:700;cursor:pointer" style-hover="background:#eafbf0">Solicitar de novo</button>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</sc-if>
+
+<!-- +screens -->
+
+<sc-if value="{{ tabsOn }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;background:#ffffff;border-top:1px solid #e7ede8;padding:8px 6px 26px;position:relative;z-index:5">
+  <button sc-camel-on-click="{{ navIni }}" style="flex:1;background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0">
+    <svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7v9h-6v-6h-4v6H4z" stroke="{{ tcIni }}" stroke-width="1.8" stroke-linejoin="round"></path></svg>
+    <span style="font-size:10px;font-weight:600;color:{{ tcIni }}">Início</span>
+  </button>
+  <button sc-camel-on-click="{{ navBusca }}" style="flex:1;background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0">
+    <svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="{{ tcBus }}" stroke-width="1.8"></circle><path d="M16 16l4.5 4.5" stroke="{{ tcBus }}" stroke-width="1.8" stroke-linecap="round"></path></svg>
+    <span style="font-size:10px;font-weight:600;color:{{ tcBus }}">Busca</span>
+  </button>
+  <button sc-camel-on-click="{{ navSvc }}" style="flex:1;background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0">
+    <svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none"><rect x="4.5" y="5" width="15" height="15" rx="2.5" stroke="{{ tcSvc }}" stroke-width="1.8"></rect><path d="M8.5 10h7M8.5 14h5" stroke="{{ tcSvc }}" stroke-width="1.8" stroke-linecap="round"></path></svg>
+    <span style="font-size:10px;font-weight:600;color:{{ tcSvc }}">Serviços</span>
+  </button>
+  <button sc-camel-on-click="{{ navSup }}" style="flex:1;background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0">
+    <svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none"><path d="M4 5.5h16V16H10l-6 4.5z" stroke="{{ tcSup }}" stroke-width="1.8" stroke-linejoin="round"></path></svg>
+    <span style="font-size:10px;font-weight:600;color:{{ tcSup }}">Suporte</span>
+  </button>
+  <button sc-camel-on-click="{{ navPerfil }}" style="flex:1;background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0">
+    <svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="{{ tcPer }}" stroke-width="1.8"></circle><path d="M5.5 20a6.5 6.5 0 0113 0" stroke="{{ tcPer }}" stroke-width="1.8" stroke-linecap="round"></path></svg>
+    <span style="font-size:10px;font-weight:600;color:{{ tcPer }}">Perfil</span>
+  </button>
+</div>
+</sc-if>
+
+<sc-if value="{{ toastOn }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:16px;right:16px;bottom:104px;z-index:40;background:#212121;color:#ffffff;padding:12px 16px;border-radius:12px;font-size:12.5px;line-height:1.45;box-shadow:0 8px 24px rgba(0,0,0,.25);animation:shup .25s ease">{{ toast }}</div>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;showRail&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Protótipo&quot;},&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;login&quot;,&quot;cadastro&quot;,&quot;inicio&quot;,&quot;busca&quot;,&quot;perfil&quot;,&quot;favoritos&quot;,&quot;solicitar&quot;,&quot;aberto&quot;,&quot;avaliacao&quot;,&quot;historico&quot;,&quot;suporte&quot;,&quot;config&quot;,&quot;mapa&quot;],&quot;default&quot;:&quot;login&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Protótipo&quot;}}">
+class Component extends DCLogic {
+  state = { s:'login', terms:false, query:'', cat:0, filterOpen:false, fsel:{}, favs:{1:true,3:true},
+    profileId:1, custom:null,
+    solStep:1, svcSel:-1, proSel:-1, sched:'agendar', dateSel:0, timeSel:1, pay:'pix',
+    stage:'caminho', atraso:true, otp:'', otpErr:false,
+    stars:0, checks:[false,false,false], block:false,
+    faqOpen:0, supTab:'faq', draft:'', msgs:[{me:false,t:'Olá, Juliana! Aqui é o suporte ServeHub. Como podemos ajudar?',time:'09:12'}],
+    notif:true, mapSel:1, toast:'' };
+  componentDidMount(){ if(this.props.startScreen) this.setState({s:this.props.startScreen}); }
+  go(k,extra){ this.setState(Object.assign({s:k,filterOpen:false},extra||{})); }
+  flash(t){ clearTimeout(this._tt); this.setState({toast:t}); this._tt=setTimeout(()=>this.setState({toast:''}),2800); }
+  key(d){
+    const st=this.state;
+    if(d==='⌫'){ this.setState({otp:st.otp.slice(0,-1),otpErr:false}); return; }
+    if(!d||st.otp.length>=4) return;
+    const o=st.otp+d;
+    if(o.length===4){
+      const target = st.stage==='caminho' ? '4827' : '1953';
+      if(o===target){
+        if(st.stage==='caminho'){ this.setState({stage:'andamento',otp:'',otpErr:false,atraso:false}); this.flash('Código confirmado · serviço iniciado'); }
+        else { this.setState({stage:'concluido',otp:'',otpErr:false}); this.flash('Serviço concluído · pagamento liberado ao profissional'); }
+      } else {
+        this.setState({otp:o,otpErr:true});
+        setTimeout(()=>this.setState({otp:'',otpErr:false}),700);
+      }
+    } else this.setState({otp:o});
+  }
+  send(){
+    const t=this.state.draft.trim(); if(!t) return;
+    this.setState({msgs:[...this.state.msgs,{me:true,t,time:'agora',status:'Enviado'}],draft:''});
+    setTimeout(()=>this.setState({msgs:[...this.state.msgs,{me:false,t:'Recebemos sua mensagem — nossa equipe responde em até 10 minutos.',time:'agora'}]}),1400);
+  }
+  renderVals(){
+    const st=this.state, S=st.s;
+    const nav=k=>()=>this.go(k);
+    const money=v=>'R$ '+v.toFixed(2).replace('.',',');
+    const PROS=[
+      {id:1,name:'João Carlos Menezes',tag:'Elétrica',cat:'Eletricista',rt:'4,9',rev:132,price:'R$ 40',dist:'1,2 km',resp:'~10 min',online:true,ver:true,ini:'JC',av:'#116b2f',photo:'data:image/jpeg;base64,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',city:'Ijuí, RS',jobs:214,bio:'Eletricista há 8 anos, formado pelo SENAI. Atendo Ijuí e região com serviço limpo, rápido e dentro da norma NBR 5410.',rvWho:'Fernanda L.',rvWhen:'há 2 semanas',rvTxt:'Chegou no horário, resolveu rápido e deixou tudo limpo. Recomendo!'},
+      {id:2,name:'Márcia Oliveira',tag:'Limpeza',cat:'Diarista',rt:'4,8',rev:214,price:'R$ 120',dist:'2,4 km',resp:'~25 min',online:true,ver:true,ini:'MO',av:'#4bd078',photo:'data:image/jpeg;base64,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',city:'Ijuí, RS',jobs:342,bio:'Diarista profissional. Capricho e pontualidade — levo meus próprios produtos, é só combinar na solicitação.',rvWho:'Carla M.',rvWhen:'há 5 dias',rvTxt:'A casa ficou impecável. Super atenciosa com os detalhes.'},
+      {id:3,name:'Pedro Antunes',tag:'Montagem',cat:'Montador de móveis',rt:'4,7',rev:89,price:'R$ 90',dist:'3,1 km',resp:'~1 h',online:false,ver:true,ini:'PA',av:'#0c4b25',photo:'data:image/jpeg;base64,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',city:'Panambi, RS',jobs:156,bio:'Montador credenciado das principais lojas de móveis da região. Ferramenta própria, montagem com garantia.',rvWho:'Diego S.',rvWhen:'há 1 mês',rvTxt:'Montou o guarda-roupa em uma hora, ficou perfeito.'},
+      {id:4,name:'Luciana Farias',tag:'Jardinagem',cat:'Jardineira',rt:'4,6',rev:56,price:'R$ 80',dist:'4,8 km',resp:'~2 h',online:false,ver:false,ini:'LF',av:'#148e3d',photo:'data:image/jpeg;base64,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',city:'Ijuí, RS',jobs:98,bio:'Jardineira e paisagista. Cuido do seu jardim como se fosse meu — poda, plantio e manutenção.',rvWho:'Renata P.',rvWhen:'há 3 semanas',rvTxt:'Jardim renovado, caprichou demais no acabamento.'},
+      {id:5,name:'Roberto Kist',tag:'Hidráulica',cat:'Encanador',rt:'4,9',rev:167,price:'R$ 70',dist:'5,0 km',resp:'~15 min',online:true,ver:true,ini:'RK',av:'#137a32',photo:'data:image/jpeg;base64,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',city:'Cruz Alta, RS',jobs:267,bio:'Encanador com 12 anos de experiência em residências e comércios. Diagnóstico honesto, sem empurrar serviço.',rvWho:'Marcos T.',rvWhen:'há 1 semana',rvTxt:'Achou o vazamento em minutos. Preço justo.'}];
+    const SVCS=[
+      {n:'Troca de lâmpada',d:'Até 3 pontos · material do cliente',p:40},
+      {n:'Instalação de tomada',d:'Nova ou substituição · padrão NBR',p:60},
+      {n:'Instalação de chuveiro',d:'Elétrico · até 7500 W',p:85},
+      {n:'Revisão do quadro de luz',d:'Disjuntores e organização',p:150}];
+    const PSVCS={1:SVCS,
+      2:[{n:'Limpeza padrão residencial',d:'Casa ou apê até 3 quartos',p:120},{n:'Limpeza pós-obra',d:'Remoção de resíduos e limpeza fina',p:180},{n:'Passadoria',d:'Até 30 peças',p:80}],
+      3:[{n:'Montagem de guarda-roupa',d:'Qualquer marca · ferramentas inclusas',p:140},{n:'Montagem de cama e cômoda',d:'Por móvel',p:90},{n:'Desmontagem e remontagem',d:'Para mudanças',p:160}],
+      4:[{n:'Corte de grama',d:'Até 200 m²',p:80},{n:'Poda de arbustos e cercas vivas',d:'Com recolhimento',p:100},{n:'Manutenção mensal do jardim',d:'2 visitas por mês',p:220}],
+      5:[{n:'Reparo de vazamento',d:'Diagnóstico incluso',p:70},{n:'Desentupimento simples',d:'Pia, ralo ou vaso',p:110},{n:'Troca de torneira ou sifão',d:'Material do cliente',p:60}]};
+    const deco=p=>({...p,revTxt:p.rev+' avaliações',fav:!!st.favs[p.id],
+      phSt:{position:'absolute',inset:0,borderRadius:'50%',backgroundImage:'url('+p.photo+')',backgroundSize:'cover',backgroundPosition:'center top'},
+      favIcon:st.favs[p.id]?'#c73a3a':'none',favStroke:st.favs[p.id]?'#c73a3a':'#8a968d',
+      dot:p.online?'#16a34a':'#c3ccc5',statusTxt:p.online?'Pronto atendimento':'Responde em '+p.resp,
+      statusFg:p.online?'#116b2f':'#7b877e',
+      onFav:e=>{e.stopPropagation();const f={...st.favs};f[p.id]=!f[p.id];this.setState({favs:f});},
+      onOpen:()=>this.go('perfil',{profileId:p.id})});
+    const cats=['Todos','Elétrica','Limpeza','Montagem','Jardinagem','Hidráulica'];
+    const q=st.query.toLowerCase();
+    const pros=PROS.filter(p=>(st.cat===0||p.tag===cats[st.cat])&&(!q||(p.name+' '+p.cat).toLowerCase().includes(q))).map(deco);
+    const favPros=PROS.filter(p=>st.favs[p.id]).map(deco);
+    const FG=[['Tipo de serviço',['Elétrica','Hidráulica','Limpeza','Jardinagem','Montagem','Pintura','Refrigeração']],
+      ['Localização',['Até 2 km','Até 5 km','Até 10 km','Toda a cidade']],
+      ['Disponibilidade',['Hoje','Amanhã','Esta semana','Pronto atendimento']],
+      ['Faixa de preço',['Até R$ 50','R$ 50 a 100','R$ 100 a 200','Acima de R$ 200']],
+      ['Avaliação mínima',['4,5+','4,0+','3,5+']],
+      ['Tempo de resposta',['Até 15 min','Até 1 h','Até 4 h']],
+      ['Experiência e qualificação',['Certificado','2+ anos de cadastro','5+ anos de cadastro']],
+      ['Forma de atendimento',['Presencial','Remoto']]];
+    const filterGroups=FG.map((g,gi)=>({title:g[0],opts:g[1].map((label,i)=>{const k=gi+':'+i,sel=!!st.fsel[k];
+      return {label,sel,bg:sel?'#116b2f':'#ffffff',fg:sel?'#ffffff':'#4a544d',bd:sel?'#116b2f':'#dbe4dd',
+        onTap:()=>{const f={...st.fsel};f[k]=!f[k];this.setState({fsel:f});}};})}));
+    const fCount=Object.values(st.fsel).filter(Boolean).length;
+    const base=st.custom?st.custom.p:(st.svcSel>=0?SVCS[st.svcSel].p:0);
+    const svcN=st.custom?st.custom.n:(st.svcSel>=0?SVCS[st.svcSel].n:'—');
+    const pf0=PROS.find(p=>p.id===st.profileId)||PROS[0];
+    const pfSvcs=(PSVCS[pf0.id]||SVCS).map(v=>({...v,price:money(v.p),onTap:()=>this.go('solicitar',{solStep:3,proSel:pf0.id,custom:{n:v.n,d:v.d,p:v.p}})}));
+    const selPro=PROS.find(p=>p.id===st.proSel);
+    const ord=st.order||{svc:'Instalação de tomada',pro:PROS[0],total:'R$ 66,90',pay:'Pix'};
+    const canNext=st.solStep===1?st.svcSel>=0:st.solStep===2?st.proSel>=0:true;
+    const stepTitles=['Escolha o serviço','Escolha o profissional','Agendamento','Pagamento'];
+    const TL=['Solicitado','Pago · valor retido','Aceito pelo profissional','A caminho','Iniciado com código','Concluído com código','Avaliado'];
+    const nowIdx={caminho:3,andamento:4,fim:4,concluido:6}[st.stage];
+    const timeline=TL.map((label,i)=>{
+      const done=i<nowIdx||(st.stage==='concluido'&&i<6);
+      const now=!done&&i===nowIdx;
+      return {label,done,now,dotBg:done?'#116b2f':now?'#16a34a':'#ffffff',dotBd:done||now?'transparent':'#cfdad2',
+        mark:done?'✓':'',fg:done||now?'#212121':'#9aa79e',fw:now?700:done?600:400,
+        anim:now?'shpulse 1.6s infinite':'none',
+        sub:i===0?'Hoje · 14:02':i===1?ord.pay+' · '+ord.total:i===2?ord.pro.name:i===3&&st.stage==='caminho'?'Chega ~15:30':i===4&&nowIdx>=4?'15:35':'',
+        lineBg:done?'#116b2f':'#dfe8e1'};});
+    const stars=[1,2,3,4,5].map(n=>({on:st.stars>=n,fg:st.stars>=n?'#f5a623':'#d7e0d9',onTap:()=>this.setState({stars:n})}));
+    const CHK=[['Pontualidade','Chegou no horário combinado'],['Qualidade do serviço','O resultado ficou como combinado'],['Cuidado com o ambiente','Organização e limpeza ao finalizar']];
+    const checks=CHK.map((c,i)=>({t:c[0],d:c[1],on:st.checks[i],bg:st.checks[i]?'#116b2f':'#ffffff',bd:st.checks[i]?'#116b2f':'#dbe4dd',mark:st.checks[i]?'✓':'',
+      onTap:()=>{const a=[...st.checks];a[i]=!a[i];this.setState({checks:a});}}));
+    const hist=[
+      {svc:'Instalação de tomada',pro:'João Carlos Menezes',date:'Hoje',price:'R$ 66,90',pill:'Em aberto',pb:'#e1ecff',pf:'#1a56b0',open:true,onTap:nav('aberto')},
+      {svc:'Limpeza pós-obra',pro:'Márcia Oliveira',date:'12/08/2026',price:'R$ 186,90',pill:'✓ Concluído',pb:'#e3f2e7',pf:'#116b2f',again:true},
+      {svc:'Montagem de guarda-roupa',pro:'Pedro Antunes',date:'28/07/2026',price:'R$ 146,90',pill:'✓ Concluído',pb:'#e3f2e7',pf:'#116b2f',again:true},
+      {svc:'Troca de lâmpada',pro:'João Carlos Menezes',date:'02/07/2026',price:'R$ 46,90',pill:'✕ Cancelado',pb:'#fdeaea',pf:'#b3261e'}
+    ].map(h=>({...h,onAgain:()=>{this.go('solicitar',{solStep:3,svcSel:1,proSel:1});this.flash('Pedido pré-preenchido — confirme data e horário');}}));
+    const FAQ=[
+      {q:'Quem garante o serviço?',a:'A ServeHub retém o pagamento até a conclusão e oferece garantia de refação em até 7 dias.'},
+      {q:'Quem traz as ferramentas?',a:'O profissional leva as ferramentas. Materiais (lâmpadas, tomadas, tintas) são combinados na solicitação.'},
+      {q:'Posso cancelar?',a:'Sim, sem custo até 2 horas antes do horário agendado. Depois disso, pode haver taxa de deslocamento.'},
+      {q:'Como funcionam os códigos?',a:'O profissional informa um código na chegada e outro no fim. Você digita os dois no app — é assim que o serviço inicia e encerra com segurança.'}];
+    const faq=FAQ.map((f,i)=>({...f,open:st.faqOpen===i,chev:st.faqOpen===i?'–':'+',onTap:()=>this.setState({faqOpen:st.faqOpen===i?-1:i})}));
+    const msgs=st.msgs.map(m=>({...m,align:m.me?'flex-end':'flex-start',bg:m.me?'#116b2f':'#ffffff',fg:m.me?'#ffffff':'#212121',
+      meta:(m.time||'')+(m.status?' · '+m.status:''),metaFg:m.me?'rgba(255,255,255,.7)':'#9aa79e'}));
+    const MK=[{id:1,x:30,y:28},{id:2,x:60,y:46},{id:5,x:42,y:64},{id:3,x:74,y:24}];
+    const markers=MK.map(m=>{const p=PROS.find(x=>x.id===m.id),sel=st.mapSel===m.id;
+      return {x:m.x+'%',y:m.y+'%',ini:p.ini,phSt:{position:'absolute',inset:2,borderRadius:'10px 10px 10px 2px',backgroundImage:'url('+p.photo+')',backgroundSize:'cover',backgroundPosition:'center top'},sel,bg:sel?'#116b2f':'#ffffff',fg:sel?'#ffffff':'#116b2f',
+        z:sel?6:4,sc:sel?'scale(1.15)':'scale(1)',dot:p.online?'#16a34a':'#c3ccc5',
+        onTap:()=>this.setState({mapSel:m.id})};});
+    const mapPro=deco(PROS.find(p=>p.id===st.mapSel)||PROS[0]);
+    const otpBoxes=[0,1,2,3].map(i=>({v:st.otp[i]||'',bd:st.otpErr?'#c73a3a':(i===st.otp.length?'#16a34a':'#dbe4dd')}));
+    const keys=['1','2','3','4','5','6','7','8','9','','0','⌫'].map(d=>({d,blank:!d,onTap:()=>this.key(d),bg:d?'#ffffff':'transparent',bd:d?'#e2e9e3':'transparent'}));
+    const tabsOn=['inicio','busca','mapa','favoritos','aberto','historico','suporte','config'].includes(S);
+    const topPros=[...PROS].sort((a,b)=>parseFloat(b.rt.replace(',','.'))-parseFloat(a.rt.replace(',','.'))).slice(0,4).map(deco);
+    const tc=on=>on?'#116b2f':'#8a968d';
+    const RAIL=[['ENTRADA',[['login','Login'],['cadastro','Cadastro']]],
+      ['DESCOBRIR',[['inicio','Início'],['busca','Buscar serviços'],['perfil','Perfil do profissional'],['mapa','Mapa de prestadores'],['favoritos','Favoritos']]],
+      ['CONTRATAR',[['solicitar','Solicitar serviço'],['aberto','Serviço em aberto'],['avaliacao','Avaliação']]],
+      ['CONTA',[['historico','Histórico'],['suporte','Suporte'],['config','Configurações']]]];
+    const rail=[];
+    RAIL.forEach(g=>{rail.push({isHdr:true,label:g[0]});g[1].forEach(it=>rail.push({isItem:true,label:it[1],
+      onTap:()=>this.go(it[0]),bg:S===it[0]?'#eafbf0':'transparent',fg:S===it[0]?'#0c4b25':'#4a544d',fw:S===it[0]?600:400}));});
+    return {
+      railOn:this.props.showRail??true, rail,
+      sLogin:S==='login', sCadastro:S==='cadastro', sBusca:S==='busca', sFav:S==='favoritos',
+      sSolic:S==='solicitar', sAval:S==='avaliacao', sConfig:S==='config', sHist:S==='historico',
+      sSup:S==='suporte', sAberto:S==='aberto', sMapa:S==='mapa', sPerfil:S==='perfil',
+      navLogin:nav('login'), navCadastro:nav('cadastro'), navBusca:nav('busca'), navFav:nav('favoritos'),
+      navSvc:nav('aberto'), navSup:nav('suporte'), navPerfil:nav('config'), navMapa:nav('mapa'),
+      navHist:nav('historico'), navAval:nav('avaliacao'),
+      tabsOn, tcIni:tc(S==='inicio'), tcBus:tc(S==='busca'||S==='mapa'), tcFav:tc(S==='favoritos'), tcSvc:tc(S==='aberto'||S==='historico'), tcSup:tc(S==='suporte'), tcPer:tc(S==='config'),
+      sInicio:S==='inicio', navIni:nav('inicio'), topPros, againList:hist.filter(h=>h.again).slice(0,2),
+      tapEle:()=>this.go('busca',{cat:1}), tapLim:()=>this.go('busca',{cat:2}), tapMon:()=>this.go('busca',{cat:3}),
+      tapJar:()=>this.go('busca',{cat:4}), tapHid:()=>this.go('busca',{cat:5}), tapTudo:()=>this.go('busca',{cat:0}),
+      toast:st.toast, toastOn:!!st.toast,
+      doLogin:()=>{this.go('inicio');this.flash('Bem-vinda de volta, Juliana!');},
+      toggleTerms:()=>this.setState({terms:!st.terms}),
+      termsBd:st.terms?'#116b2f':'#c3ccc5', termsBg:st.terms?'#116b2f':'#ffffff', termsMark:st.terms?'✓':'',
+      signupBg:st.terms?'#116b2f':'#b9cbbc',
+      doSignup:()=>{ if(!st.terms){this.flash('Aceite os Termos de Uso para continuar');return;} this.go('inicio'); this.flash('Conta criada — bem-vinda, Juliana!');},
+      query:st.query, onQuery:e=>this.setState({query:e.target.value}),
+      cats:cats.map((c,i)=>({label:c,sel:st.cat===i,bg:st.cat===i?'#116b2f':'#ffffff',fg:st.cat===i?'#ffffff':'#4a544d',bd:st.cat===i?'#116b2f':'#dbe4dd',onTap:()=>this.setState({cat:i})})),
+      pros, hasPros:pros.length>0, noPros:pros.length===0,
+      favPros, hasFavs:favPros.length>0, noFavs:favPros.length===0,
+      filterOpen:st.filterOpen, openFilter:()=>this.setState({filterOpen:true}), closeFilter:()=>this.setState({filterOpen:false}),
+      filterGroups, fLabel:fCount?'Filtros · '+fCount:'Filtros', fBg:fCount?'#116b2f':'#ffffff', fFg:fCount?'#ffffff':'#4a544d',
+      clearF:()=>this.setState({fsel:{}}),
+      applyF:()=>{this.setState({filterOpen:false});this.flash(fCount?fCount+' filtros aplicados':'Filtros limpos');},
+      solStep:st.solStep, stepTitle:stepTitles[st.solStep-1],
+      solSteps:[1,2,3,4].map(n=>({n,bg:st.solStep>n?'#116b2f':st.solStep===n?'#16a34a':'#e2e9e3',fg:st.solStep>=n?'#ffffff':'#7b877e',mark:st.solStep>n?'✓':''+n})),
+      isStep1:st.solStep===1, isStep2:st.solStep===2, isStep3:st.solStep===3, isStep4:st.solStep===4,
+      services:SVCS.map((v,i)=>{const sel=st.svcSel===i;return {...v,price:money(v.p),sel,bd:sel?'#116b2f':'#e2e9e3',bg:sel?'#eafbf0':'#ffffff',onTap:()=>this.setState({svcSel:i,custom:null})};}),
+      solPros:PROS.map(p=>{const sel=st.proSel===p.id;return {...deco(p),selBd:sel?'#116b2f':'#e2e9e3',selBg:sel?'#eafbf0':'#ffffff',onSel:()=>this.setState({proSel:p.id})};}),
+      schedAg:st.sched==='agendar', schedPr:st.sched==='pronto',
+      agBg:st.sched==='agendar'?'#ffffff':'transparent', prBg:st.sched==='pronto'?'#ffffff':'transparent',
+      setAg:()=>this.setState({sched:'agendar'}), setPr:()=>this.setState({sched:'pronto'}),
+      dates:['Hoje 29/08','Sáb 30/08','Seg 01/09','Ter 02/09'].map((d,i)=>({label:d,sel:st.dateSel===i,bg:st.dateSel===i?'#116b2f':'#ffffff',fg:st.dateSel===i?'#ffffff':'#4a544d',bd:st.dateSel===i?'#116b2f':'#dbe4dd',onTap:()=>this.setState({dateSel:i})})),
+      times:['08:00 – 10:00','10:00 – 12:00','13:30 – 15:30','16:00 – 18:00'].map((t,i)=>({label:t,sel:st.timeSel===i,bg:st.timeSel===i?'#116b2f':'#ffffff',fg:st.timeSel===i?'#ffffff':'#4a544d',bd:st.timeSel===i?'#116b2f':'#dbe4dd',onTap:()=>this.setState({timeSel:i})})),
+      pays:[{id:'pix',t:'Pix',d:'Confirmação na hora'},{id:'boleto',t:'Boleto',d:'Compensa em até 2 dias úteis'},{id:'credito',t:'Cartão de crédito',d:'Até 3x sem juros'}].map(p=>{const sel=st.pay===p.id;return {...p,sel,bd:sel?'#116b2f':'#e2e9e3',bg:sel?'#eafbf0':'#ffffff',rb:sel?'#116b2f':'#ffffff',rbd:sel?'#116b2f':'#c3ccc5',onTap:()=>this.setState({pay:p.id})};}),
+      svcName:svcN, proName:selPro?selPro.name:'—',
+      pf:deco(pf0), pfSvcs, pfJobs:pf0.jobs+' serviços concluídos', pfBio:pf0.bio, pfCity:pf0.city,
+      pfRvWho:pf0.rvWho, pfRvWhen:pf0.rvWhen, pfRvTxt:pf0.rvTxt, pfRevTxt:pf0.rev+' avaliações',
+      svcVal:money(base), taxaVal:money(6.9), totalVal:money(base+6.9),
+      schedTxt:st.sched==='pronto'?'Pronto atendimento · agora':'Hoje 29/08 · 10:00 – 12:00',
+      canNext, nextBg:canNext?'#116b2f':'#b9cbbc',
+      nextLabel:st.solStep===4?'Pagar '+money(base+6.9):st.solStep===3?'Ir para pagamento':'Continuar',
+      onNext:()=>{ if(!canNext) return;
+        if(st.solStep<4) this.setState({solStep:st.solStep+1});
+        else { const o={svc:svcN,pro:selPro||PROS[0],total:money(base+6.9),pay:st.pay==='pix'?'Pix':st.pay==='boleto'?'Boleto':'Crédito'};
+          this.go('aberto',{stage:'caminho',atraso:false,otp:'',solStep:1,custom:null,order:o}); this.flash('Pagamento aprovado · valor retido até a conclusão'); } },
+      onSolBack:()=>{ if(st.custom&&st.solStep===3) this.go('perfil'); else if(st.solStep>1) this.setState({solStep:st.solStep-1}); else this.go('busca'); },
+      ordSvc:ord.svc, ordTotal:ord.total, ordProName:ord.pro.name, ordIni:ord.pro.ini, ordAv:ord.pro.av, ordCat:ord.pro.cat, ordRt:ord.pro.rt, ordPhSt:{position:'absolute',inset:0,borderRadius:'50%',backgroundImage:'url('+ord.pro.photo+')',backgroundSize:'cover',backgroundPosition:'center top'},
+      prontoPro:(selPro||PROS[0]).name.split(' ')[0],
+      timeline, stCaminho:st.stage==='caminho', stAndamento:st.stage==='andamento', stFim:st.stage==='fim', stConcluido:st.stage==='concluido',
+      showOtp:st.stage==='caminho'||st.stage==='fim',
+      otpTitle:st.stage==='caminho'?'Código de início':'Código de fim',
+      otpSub:st.stage==='caminho'?'Peça o código ao profissional que chegou e digite para iniciar o serviço.':'Digite o código informado pelo profissional para encerrar e liberar o pagamento.',
+      otpBoxes, keys, otpErr:st.otpErr,
+      atrasoOn:st.atraso&&st.stage==='caminho', canSimAtraso:!st.atraso&&st.stage==='caminho',
+      simAtraso:()=>this.setState({atraso:true}),
+      aceitaAtraso:()=>{this.setState({atraso:false});this.flash('Novo horário aceito · chegada ~15:50');},
+      cancelaAtraso:()=>{this.go('historico');this.flash('Serviço cancelado sem custo · valor retido devolvido');},
+      encerrar:()=>this.setState({stage:'fim'}),
+      irAvaliar:nav('avaliacao'),
+      stars, checks,
+      blockOn:st.block, toggleBlock:()=>this.setState({block:!st.block}),
+      blockBg:st.block?'#c73a3a':'#e2e9e3', blockX:st.block?'translateX(18px)':'translateX(0)',
+      canSend:st.stars>0, sendBg:st.stars>0?'#116b2f':'#b9cbbc',
+      onSendAval:()=>{ if(!st.stars) return; this.go('historico'); this.flash(st.block?'Avaliação enviada · profissional bloqueado':'Avaliação enviada · obrigado, Juliana!'); },
+      hist,
+      supFaq:st.supTab==='faq', supChat:st.supTab==='chat',
+      faqBg:st.supTab==='faq'?'#ffffff':'transparent', chatBg:st.supTab==='chat'?'#ffffff':'transparent',
+      setFaq:()=>this.setState({supTab:'faq'}), setChat:()=>this.setState({supTab:'chat'}),
+      faq, msgs, draft:st.draft, onDraft:e=>this.setState({draft:e.target.value}),
+      onSendMsg:()=>this.send(),
+      notifOn:st.notif, toggleNotif:()=>this.setState({notif:!st.notif}),
+      notifBg:st.notif?'#116b2f':'#c3ccc5', notifX:st.notif?'translateX(18px)':'translateX(0)',
+      configRows:[{t:'Dados pessoais',d:'Juliana Prates'},{t:'Endereços',d:'Ijuí · 2 salvos'},{t:'Formas de pagamento',d:'Pix · Visa ··4412'},{t:'Alterar senha',d:''},{t:'Termos e privacidade',d:''}],
+      doSair:()=>{this.go('login');this.flash('Sessão encerrada');},
+      markers, mapPro,
+      onMapSolicitar:()=>this.go('perfil',{profileId:st.mapSel})
+    };
+  }
+}
+</script>
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(console.warn));
+  }
+</script>
+</body></html>
