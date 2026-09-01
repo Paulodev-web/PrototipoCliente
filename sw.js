@@ -1,6 +1,6 @@
 // Service worker do ServeHub Cliente.
 // Bump CACHE a cada deploy para invalidar a versão anterior.
-const CACHE = 'prototipocliente-v1';
+const CACHE = 'prototipocliente-v2';
 const PRECACHE = [
   "./",
   "./index.html",
